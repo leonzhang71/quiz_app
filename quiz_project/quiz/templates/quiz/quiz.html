@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Quiz</title>
+</head>
+<body>
+    <h1>Quiz</h1>
+    {% if user.is_staff %}
+        <p><a href="/admin/quiz/question/add/" target="_blank">➕ Add Question</a></p>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {% for question in questions %}
+            <div>
+                <p>{{ forloop.counter }}. {{ question.text }} <em>({{ question.points }} point{{ question.points|pluralize }})</em></p>
+                {% for choice in question.choices.all %}
+                    <label>
+                        <input type="radio" name="{{ question.id }}" value="{{ choice.id }}" />
+                        {{ choice.text }}
+                    </label><br />
+                {% endfor %}
+            </div>
+            <hr />
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html> 
